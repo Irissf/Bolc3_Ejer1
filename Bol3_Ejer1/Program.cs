@@ -32,38 +32,42 @@ namespace Bol3_Ejer1
             StreamReader leer;
 
             //CARGAMOS EL ARCHIVO CON LOS DATOS ==================================================================
-            using (leer = new StreamReader("ipes.txt"))
+            if (File.Exists("ipes.txt"))
             {
-                    linea = leer.ReadLine();
-                while (linea != null)
+                using (leer = new StreamReader("ipes.txt"))
                 {
-                    datosRecogidos = linea.Split(',');//si todo bien 2 datos, 1 ip y un tamaño
-                    
-                    if (datosRecogidos.Length == 2)
+                    linea = leer.ReadLine();
+                    while (linea != null)
                     {
-                        if (comprobarIp(datosRecogidos[0]) == true)
+                        datosRecogidos = linea.Split(',');//si todo bien 2 datos, 1 ip y un tamaño
+
+                        if (datosRecogidos.Length == 2)
                         {
-                            try
+                            if (comprobarIp(datosRecogidos[0]) == true)
                             {
-                                gb = Convert.ToUInt32(datosRecogidos[1]);
                                 try
                                 {
-                                    ipes.Add(datosRecogidos[0], datosRecogidos[1]);
+                                    gb = Convert.ToUInt32(datosRecogidos[1]);
+                                    try
+                                    {
+                                        ipes.Add(datosRecogidos[0], datosRecogidos[1]);
+                                    }
+                                    catch (ArgumentException)
+                                    {
+                                        Console.WriteLine("El indice está repetido");
+                                    }
                                 }
-                                catch (ArgumentException)
+                                catch (FormatException)
                                 {
-                                    Console.WriteLine("El indice está repetido");
+                                    Console.WriteLine("Solo son admitidos datos numéricos");
                                 }
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine("Solo son admitidos datos numéricos");
                             }
                         }
+                        linea = leer.ReadLine();
+
                     }
-                    linea = leer.ReadLine();
-                    
                 }
+
             }
 
 
